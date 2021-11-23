@@ -60,6 +60,7 @@ def count_errors(solution, verbose: false)
     # Check that no inter-router flow is over-utilised
     inter_router_flows = {} # inter_router_flows[InterRouterFlow] = [comm1, comm2, ...]
     tile_to_router_flows = {} # tile_to_router_flows[[x, y]] = [comm1, comm2]
+    router_to_tile_flows = {} # router_to_tile_flows[[x, y]] = [comm1, comm2]
     COMMUNICATIONS.each do |comm|
         # Where's the sender and receiver?
         sender_x, sender_y = allocated_tasks[comm.sender]
@@ -76,6 +77,10 @@ def count_errors(solution, verbose: false)
         # Store tile-to-router for later
         tile_to_router_flows[[sender_x, sender_y]] ||= []
         tile_to_router_flows[[sender_x, sender_y]] << comm
+
+        # Store router-to-tile for later
+        router_to_tile_flows[[receiver_x, receiver_y]] ||= []
+        router_to_tile_flows[[receiver_x, receiver_y]] << comm
 
         # Calculate X movement
         x_steps = if sender_x < receiver_x
@@ -115,10 +120,17 @@ def count_errors(solution, verbose: false)
         end
     end
 
-    # Check links from tiles to routers
+    # Check flows from tiles to routers
     tile_to_router_flows.each do |(x, y), comms|
         if comms.map(&:util).sum > 1
             errors << "Tile-to-router flow for (#{x}, #{y}) is over-utilised, by: #{comms}"
+        end
+    end
+
+    # Check flows from routers to tiles
+    router_to_tile_flows.each do |(x, y), comms|
+        if comms.map(&:util).sum > 1
+            errors << "Router-to-tile flow for (#{x}, #{y}) is over-utilised, by: #{comms}"
         end
     end
 
