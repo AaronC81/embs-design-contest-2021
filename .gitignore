@@ -1,0 +1,5 @@
+*.info*
+*.minion
+*.solution
+.MINIONSOLS*
+.MINIONSTATS*
