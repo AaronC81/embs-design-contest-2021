@@ -18,7 +18,11 @@ InterRouterFlow = Struct.new('InterRouterFlow', :from_x, :from_y, :to_x, :to_y) 
 end
 
 def count_errors(solution, verbose: false)
-    lines = solution.split("\n").map { |l| l.split.map { |i| i.strip.to_i } }
+    if solution.is_a?(String)
+        lines = solution.split("\n").map { |l| l.split.map { |i| i.strip.to_i } }
+    else
+        lines = solution
+    end
     errors = []
 
     # TODO: does not consider factors
