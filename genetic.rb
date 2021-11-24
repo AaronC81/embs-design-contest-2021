@@ -47,9 +47,9 @@ end
 
 pop = Darwinning::Population.new(
     organism: Allocation,
-    population_size: 30,
+    population_size: 15,
     fitness_goal: 0,
-    generations_limit: 10000
+    generations_limit: 1000000
 )
 
 pop.evolve!
