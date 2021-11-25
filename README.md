@@ -7,7 +7,7 @@ support changing factors.
 
 The files are:
 
-- `verify.rb <path>` checks that the solution file at `path` is valid. It can also be imported as
+- `verify.rb path` checks that the solution file at `path` is valid. It can also be imported as
   a library to provide the `count_errors` method.
 
 - `random_sol.rb x y` generates a random solution of size `x` by `y`, *which may not be valid*.
