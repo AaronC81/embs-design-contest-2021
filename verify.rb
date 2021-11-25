@@ -1,4 +1,8 @@
+# Load tasks as a list of utilisations
 TASK_UTIL = File.read(File.join(__dir__, "data", "tasks")).split("\n").map { |l| l.strip.to_f }
+
+# Load communications as instances of a `Communication` struct containing utilisation, sender task
+# index, and receiver task index
 Communication = Struct.new('Communication', :util, :sender, :receiver) do
     def to_s
         "[t#{sender} -> t#{receiver} util #{util}]"
@@ -10,6 +14,7 @@ COMMUNICATIONS = File.read(File.join(__dir__, "data", "comms")).split("\n").map 
     Communication.new(l[1].to_f, l[2].to_i, l[3].to_i)
 end
 
+# Data structure for defining a flow between two routers
 InterRouterFlow = Struct.new('InterRouterFlow', :from_x, :from_y, :to_x, :to_y) do
     def to_s
         "(#{from_x}, #{from_y}) -> (#{to_x}, #{to_y})"
@@ -17,7 +22,13 @@ InterRouterFlow = Struct.new('InterRouterFlow', :from_x, :from_y, :to_x, :to_y) 
     alias inspect to_s
 end
 
+# Counts the errors in a solution.
+# Takes `solution` as either:
+#   - A string, with lines of the form "i x y", where task `i` is at tile (`x`, `y`)
+#   - A list, in the form [[i, x, y], ...], where task `i` is at tile (`x`, `y`)
+# If `verbose` is true, the errors will be printed after this method completes.
 def count_errors(solution, verbose: false)
+    # If passed as string, convert to array
     if solution.is_a?(String)
         lines = solution.split("\n").map { |l| l.split.map { |i| i.strip.to_i } }
     else

@@ -24,27 +24,35 @@ class Allocation < Darwinning::Organism
         ]
     end
 
+    # Gets the value of a gene, given its name e.g. `task0_x`.
     def get_value(name)
         genotypes[self.class.instance_variable_get(:@genes_lookup)[name]]
     end
 
+    # Returns the set of genes in this organism, converted to a solution array suitable for passing
+    # to `count_errors`.
     def solution_array
         TASK_COUNT.times.map do |i|
             [i, get_value([i, :x]), get_value([i, :y])]
         end
     end
 
+    # Returns the set of genes in this organism, converted to a solution string suitable for passing
+    # to `count_errors`.
     def solution_string
         TASK_COUNT.times.map do |i|
             "#{i} #{get_value([i, :x])} #{get_value([i, :y])}"
         end.join("\n")
     end
 
+    # Returns the fitness of the solution, which is simply the number of errors it contains.
     def fitness
         errors = count_errors(solution_array)
     end
 end
 
+# Construct population and evolve it until we find a solution with `fitness` == 0, i.e. one with no
+# errors
 pop = Darwinning::Population.new(
     organism: Allocation,
     population_size: 15,
@@ -54,6 +62,8 @@ pop = Darwinning::Population.new(
 
 pop.evolve!
 
+# Print solution and error count, which should be 0, unless we somehow iterate through 1000000
+# generations without finding one!
 puts "----"
 puts pop.best_member.solution_string
 puts "----"
