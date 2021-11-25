@@ -1,10 +1,12 @@
 require_relative 'verify'
 
+# Get solution data
 mesh, inter_router_flows, tile_to_router_flows, router_to_tile_flows = *count_errors(
     File.read(ARGV[0]),
     return_data: true
 )
 
+# Initialise GraphViz dot file
 f = File.open("visualise.dot", "w")
 
 f.puts "digraph {"
@@ -43,8 +45,10 @@ mesh_y.times.to_a.each_cons(2) do |ya, yb|
     end
 end
 
+# Finish file
 f.puts "}"
 f.close
 
+# Rendering instructions
 puts "Now run:"
 puts "  dot -Tpng -n -Kfdp visualise.dot > visualise.png"

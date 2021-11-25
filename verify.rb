@@ -27,7 +27,10 @@ end
 #   - A string, with lines of the form "i x y", where task `i` is at tile (`x`, `y`)
 #   - A list, in the form [[i, x, y], ...], where task `i` is at tile (`x`, `y`)
 # If `verbose` is true, the errors will be printed after this method completes.
-def count_errors(solution, verbose: false)
+# If `return_data` is true, instead of returning the number of errors, it will return a fixed-length
+# array of the form `[mesh, inter_router_flows, tile_to_router_flows, router_to_tile_flows]`, or
+# throw an exception if the solution has errors.
+def count_errors(solution, verbose: false, return_data: false)
     # If passed as string, convert to array
     if solution.is_a?(String)
         lines = solution.split("\n").map { |l| l.split.map { |i| i.strip.to_i } }
@@ -151,7 +154,12 @@ def count_errors(solution, verbose: false)
         puts "Total errors: #{errors.length}"
     end
 
-    errors.length
+    if return_data
+        raise 'invalid solution' if errors.length > 0
+        [mesh, inter_router_flows, tile_to_router_flows, router_to_tile_flows]
+    else
+        errors.length
+    end
 end
 
 if __FILE__ == $0
