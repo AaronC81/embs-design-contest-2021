@@ -22,3 +22,9 @@ The `data` directory contains the problem data, separated by spaces.
 The `solutions` directory contains a variety of solutions. I've kept ones which I later found to be
 invalid due to oversights in `verify.rb` - but the ones in `solutions/valid` are (hopefully!) all
 valid solutions, using 1 for both factors.
+
+The best solution I found in the time period was [this 4x5 solution](solutions/valid/genetic_4_5.sol), with both factors as 1. (It may
+be possible to clock the cores lower, but I was not confident implementing this in my validator
+in time!)
+
+![](solutions/valid/genetic_4_5.png)
